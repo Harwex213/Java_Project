@@ -18,11 +18,11 @@ public class UpdateUserDto {
     private String username;
 
     @NotNull(message = "Can not be null")
+    private Boolean isPasswordChanged;
+
     private String oldPassword;
 
-    @NotNull(message = "Can not be null")
     private String newPassword;
 
-    @NotNull(message = "Can not be null")
     private String repeatedNewPassword;
 }
