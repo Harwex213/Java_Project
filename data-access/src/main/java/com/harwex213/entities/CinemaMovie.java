@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "cinemaMovies")
+@Table(name = "cinemaMovies", uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "cinema_id", "movie_id" })
+})
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
