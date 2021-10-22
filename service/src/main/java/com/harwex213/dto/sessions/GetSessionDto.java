@@ -1,6 +1,5 @@
 package com.harwex213.dto.sessions;
 
-import com.harwex213.entities.CinemaMovie;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,8 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class GetSessionDto {
     private Long id;
-    private CinemaMovie cinemaMovie;
+    private Long cinemaMovieId;
     private LocalDateTime time;
     private Integer ticketsAmount;
-    private Integer ticketsFree;
 }
