@@ -3,6 +3,8 @@ package com.harwex213.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,9 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CinemaMovie {
-    {
-        sessions = new ArrayList<>();
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,5 +30,6 @@ public class CinemaMovie {
     private Movie movie;
 
     @OneToMany(mappedBy = "cinemaMovie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Session> sessions;
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Session> sessions= new ArrayList<>();
 }
