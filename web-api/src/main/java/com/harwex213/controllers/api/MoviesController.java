@@ -1,4 +1,4 @@
-package com.harwex213.controllers;
+package com.harwex213.controllers.api;
 
 import com.harwex213.dto.movies.CreateMovieDto;
 import com.harwex213.dto.movies.GetMovieDto;
@@ -8,7 +8,6 @@ import com.harwex213.interfaces.IMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.*;
