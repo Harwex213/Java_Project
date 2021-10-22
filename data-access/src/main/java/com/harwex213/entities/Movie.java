@@ -33,7 +33,7 @@ public class Movie {
     @NotNull(message = "Can not be null")
     private String description;
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<CinemaMovie> cinemaMovies = new ArrayList<>();;
 }

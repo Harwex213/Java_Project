@@ -42,7 +42,7 @@ public class Session {
     @NotNull(message = "Can not be null")
     private Integer ticketsFree;
 
-    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Ticket> ticketList = new ArrayList<>();
 }

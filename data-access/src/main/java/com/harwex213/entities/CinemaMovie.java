@@ -31,7 +31,7 @@ public class CinemaMovie {
     @JoinColumn
     private Movie movie;
 
-    @OneToMany(mappedBy = "cinemaMovie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cinemaMovie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Session> sessions= new ArrayList<>();
 }
