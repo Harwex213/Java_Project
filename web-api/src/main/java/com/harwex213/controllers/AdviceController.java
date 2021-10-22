@@ -17,4 +17,12 @@ public class AdviceController {
     ErrorResponse HandleNotFound(NotFoundException e) {
         return new ErrorResponse(e.getMessage());
     }
+
+
+    @ResponseBody
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ErrorResponse HandleIllegalArgument(IllegalArgumentException e) {
+        return new ErrorResponse(e.getMessage());
+    }
 }
