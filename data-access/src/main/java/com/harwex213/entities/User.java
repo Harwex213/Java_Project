@@ -24,6 +24,11 @@ public class User {
     @NotNull(message = "Can not be null")
     private String username;
 
+    @Column
+    @Size(min = 4, max = 16, message = "username from 4 to 16")
+    @NotNull(message = "Can not be null")
+    private String password;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Ticket> ticketList;
 }
