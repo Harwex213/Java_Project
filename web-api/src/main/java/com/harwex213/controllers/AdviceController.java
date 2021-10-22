@@ -1,6 +1,7 @@
 package com.harwex213.controllers;
 
 import com.harwex213.exceptions.NotFoundException;
+import com.harwex213.models.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,7 +14,7 @@ public class AdviceController {
     @ResponseBody
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String HandleNotFound(NotFoundException e) {
-        return e.getMessage();
+    ErrorResponse HandleNotFound(NotFoundException e) {
+        return new ErrorResponse(e.getMessage());
     }
 }
