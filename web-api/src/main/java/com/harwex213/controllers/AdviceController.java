@@ -1,5 +1,6 @@
 package com.harwex213.controllers;
 
+import com.harwex213.exceptions.BadRequestException;
 import com.harwex213.exceptions.NotFoundException;
 import com.harwex213.models.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -12,12 +13,18 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class AdviceController {
 
     @ResponseBody
+    @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ErrorResponse HandleBadRequest(BadRequestException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ResponseBody
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     ErrorResponse HandleNotFound(NotFoundException e) {
         return new ErrorResponse(e.getMessage());
     }
-
 
     @ResponseBody
     @ExceptionHandler(IllegalArgumentException.class)
