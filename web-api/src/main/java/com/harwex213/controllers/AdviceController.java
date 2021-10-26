@@ -10,26 +10,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
+@ResponseBody
 public class AdviceController {
 
-    @ResponseBody
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    ErrorResponse HandleBadRequest(BadRequestException e) {
+    public ErrorResponse HandleBadRequest(BadRequestException e) {
         return new ErrorResponse(e.getMessage());
     }
 
-    @ResponseBody
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    ErrorResponse HandleNotFound(NotFoundException e) {
+    public ErrorResponse HandleNotFound(NotFoundException e) {
         return new ErrorResponse(e.getMessage());
     }
 
-    @ResponseBody
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    ErrorResponse HandleIllegalArgument(IllegalArgumentException e) {
+    public ErrorResponse HandleIllegalArgument(IllegalArgumentException e) {
         return new ErrorResponse(e.getMessage());
     }
 }
