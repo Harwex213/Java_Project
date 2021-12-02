@@ -49,6 +49,12 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public GetUserDto getUser(Long id) throws NotFoundException {
+        var user = iUserRepository.findById(id).orElseThrow(() -> new NotFoundException());
+        return Mapper.map(user, GetUserDto.class);
+    }
+
+    @Override
     public GetUserDto createUser(CreateUserDto createUserDto) throws BadRequestException {
         try {
             if (!createUserDto.getPassword().equals(createUserDto.getRepeatedPassword())) {

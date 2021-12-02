@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface IUserService extends UserDetailsService {
     public List<GetUserDto> getUsers();
+    public GetUserDto getUser(Long id) throws NotFoundException;
     public GetUserDto createUser(CreateUserDto createUserDto) throws BadRequestException;
     public void updateUser(UpdateUserDto updateUserDto) throws NotFoundException, BadRequestException;
     public void deleteUser(Long id) throws NotFoundException;
