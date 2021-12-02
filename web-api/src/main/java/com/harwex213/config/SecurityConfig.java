@@ -7,11 +7,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final JwtTokenFilter jwtTokenFilter;
@@ -58,14 +59,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and();
 
         http.authorizeRequests()
-                // front-end endpoints
+                // admin endpoints
+                .antMatchers(HttpMethod.POST, "/api/movies").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/movies").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/movies").hasAuthority("ADMIN")
+
+                .antMatchers(HttpMethod.POST, "/api/cinemas").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/cinemas").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/cinemas").hasAuthority("ADMIN")
+
+                .antMatchers(HttpMethod.POST, "/api/cinema-movies").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/cinema-movies").hasAuthority("ADMIN")
+
+                .antMatchers(HttpMethod.POST, "/api/sessions").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/sessions").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/sessions").hasAuthority("ADMIN")
+
+                .antMatchers(HttpMethod.POST, "/api/tickets").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/tickets").hasAuthority("ADMIN")
+
+                .antMatchers(HttpMethod.POST, "/api/users").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/users").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/users").hasAuthority("ADMIN")
+                // others endpoints are public
                 .antMatchers("/**").permitAll()
-                // public endpoints
-                .antMatchers("/auth/**").permitAll()
-                // user endpoints
-                .antMatchers(HttpMethod.GET, "/api/**").hasAuthority(UserRole.USER_ROLE)
-                .antMatchers(HttpMethod.POST, "/api/**").hasAuthority(UserRole.ADMIN_ROLE)
-                // private endpoints
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
