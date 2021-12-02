@@ -16,4 +16,7 @@ public class GetUserDto {
 
     @NotNull(message = "Can not be null")
     private String username;
+
+    @NotNull(message = "Can not be null")
+    private String role;
 }

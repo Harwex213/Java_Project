@@ -8,19 +8,39 @@ import com.harwex213.exceptions.BadRequestException;
 import com.harwex213.exceptions.NotFoundException;
 import com.harwex213.interfaces.IUserService;
 import com.harwex213.mapper.Mapper;
+import com.harwex213.models.UserRole;
+import com.harwex213.models.UserWithDetails;
 import com.harwex213.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
 public class UserService implements IUserService {
     private final IUserRepository iUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(IUserRepository iUserRepository) {
+    public UserService(IUserRepository iUserRepository, PasswordEncoder passwordEncoder) {
         this.iUserRepository = iUserRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        var user = iUserRepository.findByUsername(s)
+                .orElseThrow(() -> new UsernameNotFoundException("User with such username doesn't exist"));
+
+        var userAuthorities = new HashSet<UserRole>();
+        userAuthorities.add(new UserRole(user.getRole()));
+
+        return new UserWithDetails(user, userAuthorities);
     }
 
     @Override
@@ -30,37 +50,48 @@ public class UserService implements IUserService {
 
     @Override
     public GetUserDto createUser(CreateUserDto createUserDto) throws BadRequestException {
-        if (!createUserDto.getPassword().equals(createUserDto.getRepeatedPassword())) {
-            throw new BadRequestException("Password must match with repeated");
+        try {
+            if (!createUserDto.getPassword().equals(createUserDto.getRepeatedPassword())) {
+                throw new BadRequestException("Password must match with repeated");
+            }
+
+            var user = Mapper.map(createUserDto, User.class);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+            iUserRepository.save(user);
+
+            return Mapper.map(user, GetUserDto.class);
         }
-
-        var user = Mapper.map(createUserDto, User.class);
-
-        iUserRepository.save(user);
-
-        return Mapper.map(user, GetUserDto.class);
+        catch (DataIntegrityViolationException e) {
+            throw new BadRequestException("Such username already exist");
+        }
     }
 
     @Override
     public void updateUser(UpdateUserDto updateUserDto) throws NotFoundException, BadRequestException {
-        var user = iUserRepository.findById(updateUserDto.getId()).orElseThrow(NotFoundException::new);
+        try {
+            var user = iUserRepository.findById(updateUserDto.getId()).orElseThrow(NotFoundException::new);
 
-        if (updateUserDto.getIsPasswordChanged() &&
-                !updateUserDto.getNewPassword().equals(updateUserDto.getRepeatedNewPassword())) {
-            throw new BadRequestException("New password must match with repeated");
-        }
-        if (updateUserDto.getIsPasswordChanged() &&
-                !updateUserDto.getOldPassword().equals(user.getPassword())) {
-            throw new BadRequestException("Old password is not correct");
-        }
+            if (updateUserDto.getIsPasswordChanged() &&
+                    !updateUserDto.getNewPassword().equals(updateUserDto.getRepeatedNewPassword())) {
+                throw new BadRequestException("New password must match with repeated");
+            }
+            if (updateUserDto.getIsPasswordChanged() &&
+                    !updateUserDto.getOldPassword().equals(user.getPassword())) {
+                throw new BadRequestException("Old password is not correct");
+            }
 
-        user.setUsername(updateUserDto.getUsername());
-        user.setPassword(updateUserDto.getNewPassword());
-        if (updateUserDto.getIsPasswordChanged()) {
+            user.setUsername(updateUserDto.getUsername());
             user.setPassword(updateUserDto.getNewPassword());
-        }
+            if (updateUserDto.getIsPasswordChanged()) {
+                user.setPassword(updateUserDto.getNewPassword());
+            }
 
-        iUserRepository.save(user);
+            iUserRepository.save(user);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new BadRequestException("Such username already exist");
+        }
     }
 
     @Override
@@ -69,6 +100,5 @@ public class UserService implements IUserService {
 
         iUserRepository.delete(User);
     }
-
 
 }

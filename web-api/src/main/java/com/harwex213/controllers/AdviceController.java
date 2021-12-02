@@ -4,6 +4,7 @@ import com.harwex213.exceptions.BadRequestException;
 import com.harwex213.exceptions.NotFoundException;
 import com.harwex213.models.ErrorResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +29,12 @@ public class AdviceController {
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse HandleIllegalArgument(IllegalArgumentException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse BadCredentials(IllegalArgumentException e) {
         return new ErrorResponse(e.getMessage());
     }
 }
