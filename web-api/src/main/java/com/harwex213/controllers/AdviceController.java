@@ -2,6 +2,7 @@ package com.harwex213.controllers;
 
 import com.harwex213.exceptions.BadRequestException;
 import com.harwex213.exceptions.NotFoundException;
+import com.harwex213.exceptions.UnauthenticatedException;
 import com.harwex213.models.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -35,6 +36,12 @@ public class AdviceController {
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponse BadCredentials(IllegalArgumentException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(UnauthenticatedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse Unauthenticated(IllegalArgumentException e) {
         return new ErrorResponse(e.getMessage());
     }
 }

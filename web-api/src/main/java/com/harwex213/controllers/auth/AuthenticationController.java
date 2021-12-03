@@ -2,8 +2,10 @@ package com.harwex213.controllers.auth;
 
 import com.harwex213.dto.users.AuthenticateUserDto;
 import com.harwex213.dto.users.GetAuthenticatedUserDto;
+import com.harwex213.dto.users.GetUserDto;
 import com.harwex213.dto.users.RegisterUserDto;
 import com.harwex213.exceptions.BadRequestException;
+import com.harwex213.exceptions.UnauthenticatedException;
 import com.harwex213.interfaces.IAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,13 @@ public class AuthenticationController {
     @Autowired
     public AuthenticationController(IAuthenticationService iAuthenticationService) {
         this.iAuthenticationService = iAuthenticationService;
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public GetUserDto getUserByToken(@RequestHeader (name="Authorization") String authHeader) throws UnauthenticatedException {
+        var token = authHeader.split(" ")[1].trim();
+        return iAuthenticationService.getUserByToken(token);
     }
 
     @PostMapping("/login")

@@ -1,11 +1,10 @@
 package com.harwex213.services;
 
-import com.harwex213.dto.users.AuthenticateUserDto;
-import com.harwex213.dto.users.CreateUserDto;
-import com.harwex213.dto.users.GetAuthenticatedUserDto;
-import com.harwex213.dto.users.RegisterUserDto;
+import com.harwex213.dto.users.*;
 import com.harwex213.entities.User;
 import com.harwex213.exceptions.BadRequestException;
+import com.harwex213.exceptions.NotFoundException;
+import com.harwex213.exceptions.UnauthenticatedException;
 import com.harwex213.interfaces.IAuthenticationService;
 import com.harwex213.interfaces.IUserService;
 import com.harwex213.mapper.Mapper;
@@ -31,6 +30,20 @@ public class AuthenticationService implements IAuthenticationService {
         this.authenticationManager = authenticationManager;
         this.iUserService = iUserService;
         this.jwtTokenUtil = jwtTokenUtil;
+    }
+
+    @Override
+    public GetUserDto getUserByToken(String token) throws UnauthenticatedException {
+        if (!jwtTokenUtil.validate(token)) {
+            throw new UnauthenticatedException();
+        }
+
+        try {
+            return iUserService.getUser(Long.parseLong(jwtTokenUtil.getUserId(token)));
+        }
+        catch (NotFoundException e) {
+            throw new UnauthenticatedException();
+        }
     }
 
     @Override
