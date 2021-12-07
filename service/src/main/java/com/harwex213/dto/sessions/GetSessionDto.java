@@ -14,4 +14,5 @@ public class GetSessionDto {
     private Long cinemaMovieId;
     private LocalDateTime time;
     private Integer ticketsAmount;
+    private Double price;
 }

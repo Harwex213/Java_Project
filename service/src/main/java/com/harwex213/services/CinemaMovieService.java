@@ -2,7 +2,9 @@ package com.harwex213.services;
 
 import com.harwex213.dto.cinemaMovies.CreateCinemaMovieDto;
 import com.harwex213.dto.cinemaMovies.GetCinemaMovieDto;
+import com.harwex213.dto.cinemaMovies.GetCinemaMoviesByDateDto;
 import com.harwex213.entities.CinemaMovie;
+import com.harwex213.entities.Session;
 import com.harwex213.exceptions.BadRequestException;
 import com.harwex213.exceptions.NotFoundException;
 import com.harwex213.interfaces.ICinemaMovieService;
@@ -10,13 +12,17 @@ import com.harwex213.mapper.Mapper;
 import com.harwex213.repositories.ICinemaMovieRepository;
 import com.harwex213.repositories.ICinemaRepository;
 import com.harwex213.repositories.IMovieRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
+@Slf4j
 public class CinemaMovieService implements ICinemaMovieService {
     private final ICinemaMovieRepository iCinemaMovieRepository;
     private final ICinemaRepository iCinemaRepository;
@@ -32,8 +38,26 @@ public class CinemaMovieService implements ICinemaMovieService {
     }
 
     @Override
-    public List<GetCinemaMovieDto> getCinemaMovies() {
-        return Mapper.mapAll(iCinemaMovieRepository.findAll(), GetCinemaMovieDto.class);
+    public List<GetCinemaMoviesByDateDto> getCinemaMoviesByDate(LocalDate time) {
+        var cinemaMovies = iCinemaMovieRepository.findAll();
+        Map<Long, GetCinemaMoviesByDateDto> response = new HashMap<>();
+        for (var cinemaMovie:
+             cinemaMovies) {
+            var session = cinemaMovie.getSessions().stream()
+                    .filter(s -> s.getTime().toLocalDate().equals(time))
+                    .min(Comparator.comparingDouble(Session::getPrice))
+                    .orElse(null);
+            if (session != null) {
+                var cinemaMovieDto = new GetCinemaMoviesByDateDto();
+                cinemaMovieDto.setId(cinemaMovie.getId());
+                cinemaMovieDto.setMovieId(cinemaMovie.getMovie().getId());
+                cinemaMovieDto.setMovieName(cinemaMovie.getMovie().getName());
+                cinemaMovieDto.setMinPrice(session.getPrice());
+
+                response.put(cinemaMovie.getId(), cinemaMovieDto);
+            }
+        }
+        return new ArrayList<>(response.values());
     }
 
     @Override

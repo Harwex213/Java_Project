@@ -34,7 +34,10 @@ public class SessionService implements ISessionService {
 
     @Override
     public GetSessionDto createSession(CreateSessionDto createSessionDto) throws NotFoundException {
-        var session = Mapper.map(createSessionDto, Session.class);
+        var session = new Session();
+        session.setTime(createSessionDto.getTime());
+        session.setPrice(createSessionDto.getPrice());
+        session.setTicketsAmount(createSessionDto.getTicketsAmount());
         var cinemaMovie = iCinemaMovieRepository.findById(createSessionDto.getCinemaMovieId())
                 .orElseThrow(() -> new NotFoundException("CinemaMovie id not found"));
 

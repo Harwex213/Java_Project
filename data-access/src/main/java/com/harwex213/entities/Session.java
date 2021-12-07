@@ -37,6 +37,11 @@ public class Session {
     @NotNull(message = "Can not be null")
     private Integer ticketsAmount;
 
+    @Column
+    @Range(min = 0, message = "Can not be less than 0")
+    @NotNull(message = "Can not be null")
+    private Double price;
+
     @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Ticket> ticketList = new ArrayList<>();

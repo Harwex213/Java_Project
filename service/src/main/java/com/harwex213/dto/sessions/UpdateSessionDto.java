@@ -25,4 +25,8 @@ public class UpdateSessionDto {
     @Min(value = 0, message = "Can not be less than 0")
     @NotNull(message = "Can not be null")
     private Integer ticketsAmount;
+
+    @Min(value = 0, message = "Can not be less than 0")
+    @NotNull(message = "Can not be null")
+    private Double price;
 }

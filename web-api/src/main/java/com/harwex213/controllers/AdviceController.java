@@ -35,13 +35,13 @@ public class AdviceController {
 
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ErrorResponse BadCredentials(IllegalArgumentException e) {
+    public ErrorResponse BadCredentials(BadCredentialsException e) {
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler(UnauthenticatedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ErrorResponse Unauthenticated(IllegalArgumentException e) {
+    public ErrorResponse Unauthenticated(UnauthenticatedException e) {
         return new ErrorResponse(e.getMessage());
     }
 }

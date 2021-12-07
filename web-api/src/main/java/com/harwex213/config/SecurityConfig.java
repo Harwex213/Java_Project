@@ -75,8 +75,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/api/sessions").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/sessions").hasAuthority("ADMIN")
 
-                .antMatchers(HttpMethod.POST, "/api/tickets").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/api/tickets").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/tickets").hasAuthority("USER")
+                .antMatchers(HttpMethod.POST, "/api/tickets").hasAuthority("USER")
+                .antMatchers(HttpMethod.DELETE, "/api/tickets").hasAuthority("USER")
 
                 .antMatchers(HttpMethod.POST, "/api/users").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/users").hasAuthority("ADMIN")
@@ -93,7 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
+        config.addAllowedOrigin("http://localhost:3000");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
