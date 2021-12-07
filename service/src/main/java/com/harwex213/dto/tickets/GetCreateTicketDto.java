@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetTicketDto {
+public class GetCreateTicketDto {
 
     @NotNull(message = "Can not be null")
     private Long id;
@@ -20,16 +20,4 @@ public class GetTicketDto {
 
     @NotNull(message = "Can not be null")
     private Long userId;
-
-    @NotNull
-    private String cinemaName;
-
-    @NotNull
-    private String movieName;
-
-    @NotNull
-    private LocalDateTime time;
-
-    @NotNull
-    private Double price;
 }
