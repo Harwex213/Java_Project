@@ -1,0 +1,14 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    margin: 20px;
+}
+
+.form__field-wrapper {
+    margin-bottom: 15px;
+}
+
+.form__field {
+    margin-right: 8px;
+}
