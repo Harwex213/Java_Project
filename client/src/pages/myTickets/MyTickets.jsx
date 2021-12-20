@@ -1,26 +1,17 @@
 import React from "react";
 import dateFormat from "dateformat";
 import "../../common/styles/table.css";
-
-let localId = 0;
-const tickets = [
-    {
-        id: localId++,
-        cinemaName: "Cinema 1",
-        movieName: "Movie 1",
-        time: dateFormat(new Date(), "HH:MM"),
-        price: "$7.29",
-    },
-    {
-        id: localId++,
-        cinemaName: "Cinema",
-        movieName: "Movie",
-        time: dateFormat(new Date(), "HH:MM"),
-        price: "$17.29",
-    },
-];
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { deleteTicket, getTickets } from "../../api/tickets";
 
 const MyTickets = () => {
+    const queryClient = useQueryClient();
+    const returnTicket = useMutation(deleteTicket);
+    const { isSuccess, data } = useQuery("tickets", getTickets);
+    if (!isSuccess) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <table>
             <thead>
@@ -33,14 +24,22 @@ const MyTickets = () => {
                 </tr>
             </thead>
             <tbody>
-                {tickets.map((ticket) => (
+                {data.map((ticket) => (
                     <tr key={ticket.id}>
                         <td>{ticket.cinemaName}</td>
                         <td>{ticket.movieName}</td>
-                        <td>{ticket.time}</td>
+                        <td>{dateFormat(ticket.time, "yyyy-mm-dd, HH:MM")}</td>
                         <td>{ticket.price}</td>
                         <td>
-                            <button>Return</button>
+                            <button
+                                onClick={() =>
+                                    returnTicket.mutate(ticket.id, {
+                                        onSuccess: () => queryClient.invalidateQueries("tickets"),
+                                    })
+                                }
+                            >
+                                Return
+                            </button>
                         </td>
                     </tr>
                 ))}

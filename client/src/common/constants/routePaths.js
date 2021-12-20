@@ -4,7 +4,8 @@ const routePaths = {
     main: "/main",
     login: "/login",
     register: "/register",
-    myTickets: "my-tickets",
+    myTickets: "/my-tickets",
+    dashboard: "/dashboard",
     notFound: "/not-found",
 };
 

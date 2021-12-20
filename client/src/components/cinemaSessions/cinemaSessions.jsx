@@ -2,14 +2,26 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import routePaths from "../../common/constants/routePaths";
-import "./styles.css";
 import dateFormat from "dateformat";
+import "./styles.css";
+import { useMutation } from "react-query";
+import { postTicket } from "../../api/tickets";
+import { useAuthContext } from "../../app/AuthContext";
 
 const CinemaSessions = ({ cinema }) => {
     const navigate = useNavigate();
+    const orderTicket = useMutation(postTicket);
+    const { isAuth, user } = useAuthContext();
 
-    const handleTicketOrder = () => {
-        navigate("../../" + routePaths.myTickets);
+    const handleTicketOrder = (session) => {
+        if (isAuth) {
+            orderTicket.mutate(
+                { sessionId: session.id, userId: user.id },
+                {
+                    onSuccess: () => navigate("../.." + routePaths.myTickets),
+                }
+            );
+        }
     };
 
     return (
@@ -19,7 +31,10 @@ const CinemaSessions = ({ cinema }) => {
                 {cinema.sessions.length > 0
                     ? cinema.sessions.map((session) => (
                           <div key={session.id} className="cinema__session">
-                              <button disabled={!session.isExistFreeSeats} onClick={handleTicketOrder}>
+                              <button
+                                  disabled={!session.isExistFreeSeats}
+                                  onClick={() => handleTicketOrder(session)}
+                              >
                                   {session.price}
                               </button>
                               <span>{dateFormat(session.time, "HH:MM")}</span>

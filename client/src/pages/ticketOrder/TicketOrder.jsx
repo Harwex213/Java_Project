@@ -77,7 +77,7 @@ const TicketOrder = ({ date }) => {
 };
 
 TicketOrder.propTypes = {
-    date: PropTypes.object,
+    date: PropTypes.string,
 };
 
 export default TicketOrder;

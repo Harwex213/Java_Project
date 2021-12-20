@@ -33,7 +33,16 @@ const UserMenu = () => {
 };
 
 const AdminMenu = () => {
-    return <div>admin!</div>;
+    return (
+        <>
+            <Link className="menu__item" to={routePaths.myTickets}>
+                Dashboard
+            </Link>
+            <button className="menu__item" onClick={() => authApi.logout()}>
+                Log out
+            </button>
+        </>
+    );
 };
 
 const Header = () => {

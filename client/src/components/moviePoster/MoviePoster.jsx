@@ -9,7 +9,7 @@ const MoviePoster = ({ movie }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="poster" onClick={() => navigate(`${movie?.id}`)}>
+        <div className="poster" onClick={() => navigate(`${movie?.movieId}`)}>
             <img src={mockImgSrc} alt="movie poster" />
             <div className="poster__info">
                 <span>{movie?.movieName}</span>
