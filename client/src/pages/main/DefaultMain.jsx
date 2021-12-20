@@ -28,26 +28,21 @@ const DefaultMain = () => {
     }
 
     return (
-        <Routes>
-            <Route
-                path=""
-                element={
-                    <>
-                        <input
-                            onChange={(event) => {
-                                setDate(dateFormat(event.target.value, "yyyy-mm-dd"));
-                            }}
-                            type="date"
-                            value={date}
-                            min={today}
-                            max="2021-12-31"
-                        />
-                        {splitMovies}
-                    </>
-                }
+        <>
+            <input
+                onChange={(event) => {
+                    setDate(dateFormat(event.target.value, "yyyy-mm-dd"));
+                }}
+                type="date"
+                value={date}
+                min={today}
+                max="2021-12-31"
             />
-            <Route path=":movieId" element={<TicketOrder />} />
-        </Routes>
+            <Routes>
+                <Route path="" element={<>{splitMovies}</>} />
+                <Route path=":movieId" element={<TicketOrder date={date} />} />
+            </Routes>
+        </>
     );
 };
 

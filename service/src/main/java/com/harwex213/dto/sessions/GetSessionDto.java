@@ -15,4 +15,5 @@ public class GetSessionDto {
     private LocalDateTime time;
     private Integer ticketsAmount;
     private Double price;
+    private Boolean isExistFreeSeats;
 }

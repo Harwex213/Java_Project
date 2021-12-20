@@ -1,10 +1,12 @@
 .cinema {
     display: flex;
     align-items: center;
+    margin-top: 20px;
 }
 
 .cinema__sessions {
     display: flex;
+    margin-left: 10px;
 }
 
 .cinema__session {

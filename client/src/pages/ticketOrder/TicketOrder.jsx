@@ -2,6 +2,9 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import dateFormat from "dateformat";
 import CinemaSessions from "../../components/cinemaSessions/cinemaSessions";
+import { useQuery } from "react-query";
+import PropTypes from "prop-types";
+import { getCinemasByDateEventId } from "../../api/cinemas";
 
 let localId = 0;
 const mockSessions = [
@@ -55,15 +58,26 @@ const mockSessions = [
     },
 ];
 
-const TicketOrder = () => {
+const TicketOrder = ({ date }) => {
     const { movieId } = useParams();
+    const { isSuccess, data } = useQuery(["session", { date, movieId }], () =>
+        getCinemasByDateEventId(date, movieId)
+    );
+    if (!isSuccess) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div>
-            {mockSessions.map((cinema) => (
+            {data.map((cinema) => (
                 <CinemaSessions key={cinema.id} cinema={cinema} />
             ))}
         </div>
     );
+};
+
+TicketOrder.propTypes = {
+    date: PropTypes.object,
 };
 
 export default TicketOrder;

@@ -1,6 +1,7 @@
 package com.harwex213.controllers.api;
 
 import com.harwex213.dto.cinemas.CreateCinemaDto;
+import com.harwex213.dto.cinemas.GetCinemaByDateMovieDto;
 import com.harwex213.dto.cinemas.GetCinemaDto;
 import com.harwex213.dto.cinemas.UpdateCinemaDto;
 import com.harwex213.exceptions.NotFoundException;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -26,6 +29,17 @@ public class CinemasController {
     public List<GetCinemaDto> getCinemas()
     {
         return iCinemaService.getCinemas();
+    }
+
+
+    @GetMapping(path = "/{date}/{movieId}")
+    public List<GetCinemaByDateMovieDto> getCinemasByDateAndMovie(@PathVariable("date") String date,
+                                                                  @PathVariable("movieId") Long movieId)
+    {
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        var dateTime = LocalDate.parse(date, formatter);
+
+        return iCinemaService.getCinemasByDateAndMovie(dateTime, movieId);
     }
 
     @PostMapping
