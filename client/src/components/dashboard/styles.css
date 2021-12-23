@@ -1,0 +1,20 @@
+.buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.buttons__button_margin {
+    margin-right: 10px;
+}
+
+.isEditing {
+    display: flex;
+}
+
+.isEditing__title {
+    margin: 0;
+}
+
+.cinemaMoviesSelect {
+    margin-block: 15px;
+}

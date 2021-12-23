@@ -1,0 +1,9 @@
+.list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.list > * {
+    margin: 15px 0;
+}

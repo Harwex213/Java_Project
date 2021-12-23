@@ -1,0 +1,17 @@
+.cinema {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.cinema__sessions {
+    display: flex;
+    margin-left: 10px;
+}
+
+.cinema__session {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px;
+}
