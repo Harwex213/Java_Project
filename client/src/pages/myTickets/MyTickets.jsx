@@ -3,6 +3,7 @@ import dateFormat from "dateformat";
 import "../../common/styles/table.css";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { deleteTicket, getTickets } from "../../api/tickets";
+import "./styles.css";
 
 const MyTickets = () => {
     const queryClient = useQueryClient();
@@ -13,7 +14,7 @@ const MyTickets = () => {
     }
 
     return (
-        <table>
+        <table className="ticketsTable">
             <thead>
                 <tr>
                     <td>cinema</td>

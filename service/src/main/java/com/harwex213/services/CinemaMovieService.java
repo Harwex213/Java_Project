@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -35,6 +36,27 @@ public class CinemaMovieService implements ICinemaMovieService {
         this.iCinemaMovieRepository = iCinemaMovieRepository;
         this.iCinemaRepository = iCinemaRepository;
         this.iMovieRepository = iMovieRepository;
+    }
+
+    @Override
+    public List<GetCinemaMovieDto> getCinemaMoviesByCinema(Long cinemaId) {
+        var cinemaMovies = iCinemaMovieRepository.findAll();
+        List<GetCinemaMovieDto> response = new ArrayList<>();
+        for (var cinemaMovie:
+             cinemaMovies
+                     .stream()
+                     .filter(cm -> cm.getCinema().getId().equals(cinemaId))
+                     .collect(Collectors.toList())) {
+            var cinemaMovieDto = new GetCinemaMovieDto();
+            cinemaMovieDto.setId(cinemaMovie.getId());
+            cinemaMovieDto.setCinemaId(cinemaId);
+            cinemaMovieDto.setMovieId(cinemaMovie.getMovie().getId());
+            cinemaMovieDto.setMovieName(cinemaMovie.getMovie().getName());
+
+            response.add(cinemaMovieDto);
+        }
+
+        return response;
     }
 
     @Override

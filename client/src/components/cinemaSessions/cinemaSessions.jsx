@@ -15,12 +15,8 @@ const CinemaSessions = ({ cinema }) => {
 
     const handleTicketOrder = (session) => {
         if (isAuth) {
-            orderTicket.mutate(
-                { sessionId: session.id, userId: user.id },
-                {
-                    onSuccess: () => navigate("../.." + routePaths.myTickets),
-                }
-            );
+            orderTicket.mutate({ sessionId: session.id, userId: user.id });
+            setTimeout(() => navigate("../.." + routePaths.myTickets), 500);
         }
     };
 

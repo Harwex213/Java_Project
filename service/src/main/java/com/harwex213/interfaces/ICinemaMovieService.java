@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ICinemaMovieService {
+    public List<GetCinemaMovieDto> getCinemaMoviesByCinema(Long cinemaId);
     public List<GetCinemaMoviesByDateDto> getCinemaMoviesByDate(LocalDate time);
     public GetCinemaMovieDto createCinemaMovie(CreateCinemaMovieDto createCinemaMovieDto) throws NotFoundException, BadRequestException;
     public void deleteCinemaMovie(Long id) throws NotFoundException;

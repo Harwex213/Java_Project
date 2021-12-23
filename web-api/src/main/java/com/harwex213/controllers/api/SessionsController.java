@@ -22,10 +22,10 @@ public class SessionsController {
         this.iSessionService = iSessionService;
     }
 
-    @GetMapping
-    public List<GetSessionDto> getSessions()
+    @GetMapping(path="{cinemaMovieId}")
+    public List<GetSessionDto> getSessions(@PathVariable("cinemaMovieId") Long cinemaMovieId)
     {
-        return iSessionService.getSessions();
+        return iSessionService.getSessions(cinemaMovieId);
     }
 
     @PostMapping

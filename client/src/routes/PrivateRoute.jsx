@@ -6,6 +6,7 @@ import routePaths from "../common/constants/routePaths";
 
 const PrivateRoute = ({ children, roles, navigateTo }) => {
     const { isAuth, user } = useAuthContext();
+    console.log(user);
     const isAllowed = isAuth && roles.map((role) => role.toUpperCase()).includes(user.role);
 
     return isAllowed ? children : <Navigate to={navigateTo ? navigateTo : routePaths.notFound} replace />;

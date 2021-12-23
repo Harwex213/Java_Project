@@ -7,6 +7,7 @@ import com.harwex213.entities.Ticket;
 import com.harwex213.exceptions.BadRequestException;
 import com.harwex213.exceptions.NotFoundException;
 import com.harwex213.exceptions.UnauthenticatedException;
+import com.harwex213.interfaces.IMailService;
 import com.harwex213.interfaces.ITicketService;
 import com.harwex213.mapper.Mapper;
 import com.harwex213.repositories.ISessionRepository;
@@ -26,16 +27,19 @@ public class TicketService implements ITicketService {
     private final ITicketRepository iTicketRepository;
     private final ISessionRepository iSessionRepository;
     private final IUserRepository iUserRepository;
+    private final IMailService iMailService;
     private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     public TicketService(ITicketRepository iTicketRepository,
                          ISessionRepository iSessionRepository,
                          IUserRepository iUserRepository,
+                         IMailService iMailService,
                          JwtTokenUtil jwtTokenUtil) {
         this.iTicketRepository = iTicketRepository;
         this.iSessionRepository = iSessionRepository;
         this.iUserRepository = iUserRepository;
+        this.iMailService = iMailService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -75,6 +79,9 @@ public class TicketService implements ITicketService {
             var ticket = new Ticket();
             var session = iSessionRepository.findById(createTicketDto.getSessionId())
                     .orElseThrow(() -> new NotFoundException("Session id not found"));
+            if (session.getTicketList().size() == session.getTicketsAmount()) {
+                throw new BadRequestException("All tickets Ordered");
+            }
             var user = iUserRepository.findById(createTicketDto.getUserId())
                     .orElseThrow(() -> new NotFoundException("User id not found"));
 
@@ -82,6 +89,14 @@ public class TicketService implements ITicketService {
             ticket.setUser(user);
 
             iTicketRepository.save(ticket);
+
+//            if (!user.getEmail().isBlank()) {
+//                iMailService.send(user.getEmail(), "New ticket order",
+//                        "Hello, " + user.getUsername() + "!\n" +
+//                        "You ordered new ticket: " + session.getCinemaMovie().getMovie().getName() +
+//                        " in cinema " + session.getCinemaMovie().getCinema().getName() +
+//                        " on time " + session.getTime() + " and price " + session.getPrice() + ".");
+//            }
 
             return Mapper.map(ticket, GetCreateTicketDto.class);
         }

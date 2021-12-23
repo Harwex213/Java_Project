@@ -19,4 +19,6 @@ public class GetCinemaMovieDto {
 
     @NotNull(message = "Can not be null")
     private Long movieId;
+
+    private String movieName;
 }

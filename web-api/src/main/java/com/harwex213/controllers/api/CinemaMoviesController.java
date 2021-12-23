@@ -26,6 +26,12 @@ public class CinemaMoviesController {
         this.iCinemaMovieService = iCinemaMovieService;
     }
 
+    @GetMapping(path = "/by-cinema/{cinemaId}")
+    public List<GetCinemaMovieDto> getCinemaMoviesByCinemaId(@PathVariable("cinemaId") Long cinemaId)
+    {
+        return iCinemaMovieService.getCinemaMoviesByCinema(cinemaId);
+    }
+
     @GetMapping(path = "/{date}")
     public List<GetCinemaMoviesByDateDto> getCinemaMovies(@PathVariable("date") String date)
     {

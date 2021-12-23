@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class SessionService implements ISessionService {
@@ -28,8 +29,13 @@ public class SessionService implements ISessionService {
     }
 
     @Override
-    public List<GetSessionDto> getSessions() {
-        return Mapper.mapAll(iSessionRepository.findAll(), GetSessionDto.class);
+    public List<GetSessionDto> getSessions(Long cinemaMovieId) {
+        return Mapper.mapAll(
+                iSessionRepository.findAll()
+                        .stream()
+                        .filter(s -> s.getCinemaMovie().getId().equals(cinemaMovieId))
+                        .collect(Collectors.toList()),
+                GetSessionDto.class);
     }
 
     @Override

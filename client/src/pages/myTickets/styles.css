@@ -1,3 +1,4 @@
-table {
-
+.ticketsTable {
+    width: calc(100% - 20px);
+    margin-left: 20px;
 }
